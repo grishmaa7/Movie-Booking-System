@@ -6,7 +6,7 @@ import Movies from './pages/Movies'
 import MovieDetails from './pages/MovieDetails'
 import Login from './pages/Login'
 import Register from './pages/Register'
-import MyBooking from './pages/MyBooking'
+import MyBooking from './pages/Mybookings'
 
 const App = () => {
   1
