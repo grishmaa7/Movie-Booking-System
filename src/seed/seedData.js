@@ -7,6 +7,7 @@ import {
     setDoc
 } from "firebase/firestore";
 import { db } from "../config/firebase";
+import { type } from "firebase/firestore/pipelines";
 const MOVIES = [
     {
         id: "movie_1",
@@ -181,3 +182,66 @@ const SHOWTIMES = [
         time: "17:00"
     }
 ];
+//generating seats
+function generateSeats(showTime) {
+    const seats = [];
+    const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+    
+    rows.forEach(row => {
+        for (let col=1; col <= 10; col++) {
+                    seats.push({
+                        id: `${showTime.id}_seat_${row}${col}`,
+                        showTimeId: showTime.id,
+                        seatID: `${row}${col}`,
+                        status: "available",
+                        lockedBy: null,
+                        lockedAt: null,
+                        bookingID: null,
+                        type: (row === 'A' || row === 'B') ? "VIP" : "Regular"
+                    });
+                }
+            });
+            return seats;
+}
+//seed data store
+export async function seedFirestore() {
+    //checking if the movie alr has data
+    const movieRef = collection(db, "movies");
+    const existingMovies = await getDocs(movieRef);
+    
+    //check if we alr have that movies in our db collection called movies
+    if (existingMovies.size > 0) {
+        console.log("Movies collection already seeded.");
+        return;
+    }
+    //if empty, we seed the data
+    console.log("Starting the Seeding Process...");
+
+    ////seed/writing the movies in db
+    for (const movie of MOVIES) {
+        await setDoc(doc(db, "movies", movie.id), movie);
+    }
+    console.log("Seeding Process Completed: Movies Seeded.");
+    
+    //seed the theatres
+    for (const theatre of THEATRES) {
+        await setDoc(doc(db, "theatres", theatre.id), theatre);
+    }   
+    console.log("Seeding Process Completed: Theatres Seeded.");
+
+    //seed showtimes
+    for (const show of SHOWTIMES) {
+        await setDoc(doc(db, "showtimes", show.id), show);
+    }
+    console.log("Seeding Process Completed: Showtimes Seeded.");
+
+    //writing seeds
+    for (const show of SHOWTIMES) {
+        const seats = generateSeats(show);
+        for (const seat of seats) {
+            await setDoc(doc(db, "seats", seat.id), seat);
+        }
+    }
+    console.log("Seats Created");
+    console.log("Seeding Process Completed on Firebase!!!");
+}
