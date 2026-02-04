@@ -10,12 +10,12 @@ import {getFirestore} from "firebase/firestore"
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-    authDomain: "movie-booking-system-3c1aa.firebaseapp.com",
-    projectId: "movie-booking-system-3c1aa",
-    storageBucket: "movie-booking-system-3c1aa.firebasestorage.app",
-    messagingSenderId: "959848002473",
-    appId: "1:959848002473:web:ab4732d469dac77bda0ab8",
-    measurementId: "G-FW0SYGSXRX"
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_FIREBASE_APP_ID,
+    measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 // Initialize Firebase
