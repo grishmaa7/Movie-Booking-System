@@ -2,15 +2,10 @@ import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
-const heroImages = [
-    "https://image.tmdb.org/t/p/original/8YFL5QQVPy3AgrEQxNYVSgiPEbe.jpg",
-    "https://image.tmdb.org/t/p/original/zsbolOkw8RhTU4DKOrpf4M7KCmi.jpg",
-    "https://image.tmdb.org/t/p/original/rAiYTfKGqDCRIIqo664sY9XZIvQ.jpg",
-]
-
 export default function Home() {
     const [index, setIndex] = useState(0)
     const [movies, setMovies] = useState([])
+    const [heroImages, setHeroImages] = useState([]) // dynamic hero images
 
     // AUTO SLIDER
     useEffect(() => {
@@ -18,13 +13,15 @@ export default function Home() {
             nextSlide()
         }, 2500)
         return () => clearInterval(timer)
-    }, [])
+    }, [heroImages]) // run when heroImages change
 
     const nextSlide = () => {
+        if (heroImages.length === 0) return
         setIndex((prev) => (prev + 1) % heroImages.length)
     }
 
     const prevSlide = () => {
+        if (heroImages.length === 0) return
         setIndex((prev) =>
             prev === 0 ? heroImages.length - 1 : prev - 1
         )
@@ -34,7 +31,12 @@ export default function Home() {
     useEffect(() => {
         fetch("https://api.themoviedb.org/3/discover/movie?api_key=80d491707d8cf7b38aa19c7ccab0952f")
             .then(res => res.json())
-            .then(data => setMovies(data.results.slice(0, 8)))
+            .then(data => {
+                const topMovies = data.results.slice(0, 8)
+                setMovies(topMovies)
+                // Hero images from first 3 movies
+                setHeroImages(topMovies.slice(0, 3).map(m => `https://image.tmdb.org/t/p/original${m.backdrop_path}`))
+            })
     }, [])
 
     return (
@@ -42,10 +44,12 @@ export default function Home() {
 
             {/* HERO */}
             <section className="relative h-[80vh] flex items-center">
-                <img
-                    src={heroImages[index]}
-                    className="absolute inset-0 w-full h-full object-cover opacity-40 transition-all duration-700"
-                />
+                {heroImages.length > 0 && (
+                    <img
+                        src={heroImages[index]}
+                        className="absolute inset-0 w-full h-full object-cover opacity-40 transition-all duration-700"
+                    />
+                )}
 
                 {/* LEFT CONTENT */}
                 <div className="relative w-[85%] mx-auto">
