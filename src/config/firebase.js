@@ -9,7 +9,7 @@ import {getFirestore} from "firebase/firestore"
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyDPWKL_b_l3iGlXjAher6NbtEbPazo03ds",
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
     authDomain: "movie-booking-system-3c1aa.firebaseapp.com",
     projectId: "movie-booking-system-3c1aa",
     storageBucket: "movie-booking-system-3c1aa.firebasestorage.app",

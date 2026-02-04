@@ -7,6 +7,7 @@ import MovieDetails from './pages/MovieDetails'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import MyBooking from './pages/Mybookings'
+import Footer from './pages/Footer'
 
 const App = () => {
   1
@@ -20,7 +21,9 @@ const App = () => {
         <Route path='/movies' element={<Movies />} />
         <Route path='/movies/:id' element={<MovieDetails />} />
         <Route path='/my-booking' element={<MyBooking />} />
+
       </Routes>
+      <Footer />
     </>
   )
 }
