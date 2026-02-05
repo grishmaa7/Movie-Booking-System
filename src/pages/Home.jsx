@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
-import { MOVIES } from "../seedData"; // fetch from seedData
+import { MOVIES } from "../seed/seedData"; 
 
 export default function Home() {
     const [heroIndex, setHeroIndex] = useState(0);
 
-    // top 3 movies for carousel
+   
     const heroMovies = MOVIES.slice(0, 3);
     const heroMovie = heroMovies[heroIndex];
 
-    // auto carousel
+   
     useEffect(() => {
         const interval = setInterval(() => {
             setHeroIndex((prev) => (prev + 1) % heroMovies.length);
@@ -24,7 +24,7 @@ export default function Home() {
 
     return (
         <div className="bg-[#202A44] text-yellow-300 min-h-screen">
-            {/* HERO CAROUSEL */}
+          
             {heroMovie && (
                 <div className="relative h-[75vh]">
                     <img
@@ -83,7 +83,7 @@ export default function Home() {
                 </div>
             )}
 
-            {/* NOW SHOWING */}
+          
             <div className="px-10 py-14">
                 <h2 className="text-3xl font-bold mb-6">Now Showing 🎬</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -107,7 +107,7 @@ export default function Home() {
                     ))}
                 </div>
 
-                {/* BUY TICKETS BUTTON BELOW BOX */}
+           
                 <div className="mt-6 flex justify-center">
                     <button className="bg-yellow-500 hover:bg-yellow-600 py-3 px-8 rounded-lg font-bold text-black text-lg">
                         Buy Tickets

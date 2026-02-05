@@ -1,4 +1,4 @@
-/* ================= MOVIES (20 ITEMS) ================= */
+
 export const MOVIES = [
     {
         id: "movie_1",
@@ -112,7 +112,6 @@ export const MOVIES = [
     }
 ];
 
-// duplicate movies to reach 20 if needed
 for (let i = 11; i <= 20; i++) {
     MOVIES.push({
         ...MOVIES[i - 11],
@@ -121,7 +120,7 @@ for (let i = 11; i <= 20; i++) {
     });
 }
 
-/* ================= THEATRES ================= */
+
 export const THEATRES = [
     { id: "theatre_1", name: "Grand Cinema", location: "Downtown" },
     { id: "theatre_2", name: "City Plex", location: "Mall Road" },
@@ -154,7 +153,7 @@ export function generateSeats(show) {
     return seats;
 }
 
-/* ================= FIRESTORE SEED FUNCTION (OPTIONAL) ================= */
+
 import { collection, getDocs, deleteDoc, doc, setDoc } from "firebase/firestore";
 import { db } from "../config/firebase";
 

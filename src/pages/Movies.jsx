@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { MOVIES } from "../seedData";
+import { MOVIES } from "../seed/seedData";
 
 export default function Movies() {
   return (
