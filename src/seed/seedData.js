@@ -1,247 +1,186 @@
 import {
     collection,
-    addDoc,
     getDocs,
     deleteDoc,
     doc,
     setDoc
 } from "firebase/firestore";
 import { db } from "../config/firebase";
-import { type } from "firebase/firestore/pipelines";
+
+/* ================= MOVIES (20 ITEMS) ================= */
 const MOVIES = [
     {
         id: "movie_1",
         title: "Inception",
-        genre: ["Sci-Fi", "Thriller"],
+        genre: ["Sci-Fi"],
         rating: 8.8,
-        synopsis: "A thief who enters dream worlds...",
         duration: 148,
-        status: "now_showing"
+        status: "now_showing",
+        synopsis: "A thief enters dream worlds.",
+        poster: "https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg"
     },
     {
         id: "movie_2",
         title: "The Dark Knight",
-        genre: ["Action", "Drama"],
+        genre: ["Action"],
         rating: 9.0,
-        synopsis: "Batman raises the stakes...",
         duration: 152,
-        status: "now_showing"
+        status: "now_showing",
+        synopsis: "Batman vs Joker.",
+        poster: "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg"
     },
     {
         id: "movie_3",
         title: "Interstellar",
-        genre: ["Sci-Fi", "Adventure"],
+        genre: ["Sci-Fi"],
         rating: 8.6,
-        synopsis: "A journey through spacetime...",
         duration: 169,
-        status: "coming_soon"
+        status: "now_showing",
+        synopsis: "Journey through space and time.",
+        poster: "https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg"
     },
     {
         id: "movie_4",
-        title: "Avengers: Endgame",
-        genre: ["Action", "Sci-Fi"],
+        title: "Avengers Endgame",
+        genre: ["Action"],
         rating: 8.4,
-        synopsis: "The Avengers assemble one last time...",
         duration: 181,
-        status: "now_showing"
+        status: "now_showing",
+        synopsis: "Final Avengers battle.",
+        poster: "https://image.tmdb.org/t/p/w500/ulzhLuWrPK07P1YkdWQLZnQh1JL.jpg"
     },
     {
         id: "movie_5",
         title: "Parasite",
-        genre: ["Thriller", "Drama"],
+        genre: ["Thriller"],
         rating: 8.5,
-        synopsis: "A dark tale of class divide...",
         duration: 132,
-        status: "now_showing"
+        status: "now_showing",
+        synopsis: "Dark class struggle.",
+        poster: "https://image.tmdb.org/t/p/w500/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg"
     },
     {
         id: "movie_6",
         title: "Joker",
-        genre: ["Crime", "Drama"],
+        genre: ["Drama"],
         rating: 8.4,
-        synopsis: "A troubled man descends into madness...",
         duration: 122,
-        status: "now_showing"
+        status: "now_showing",
+        synopsis: "Rise of Joker.",
+        poster: "https://image.tmdb.org/t/p/w500/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg"
     },
     {
         id: "movie_7",
         title: "Dune",
-        genre: ["Sci-Fi", "Adventure"],
+        genre: ["Sci-Fi"],
         rating: 8.1,
-        synopsis: "A noble family becomes embroiled in war...",
         duration: 155,
-        status: "coming_soon"
+        status: "now_showing",
+        synopsis: "Desert planet politics.",
+        poster: "https://image.tmdb.org/t/p/w500/d5NXSklXo0qyIYkgV94XAgMIckC.jpg"
     },
     {
         id: "movie_8",
         title: "The Matrix",
-        genre: ["Sci-Fi", "Action"],
+        genre: ["Sci-Fi"],
         rating: 8.7,
-        synopsis: "A hacker discovers the truth about reality...",
         duration: 136,
-        status: "now_showing"
+        status: "now_showing",
+        synopsis: "Reality is a lie.",
+        poster: "https://image.tmdb.org/t/p/w500/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg"
     },
     {
         id: "movie_9",
         title: "Titanic",
-        genre: ["Romance", "Drama"],
+        genre: ["Romance"],
         rating: 7.9,
-        synopsis: "A love story aboard a doomed ship...",
         duration: 195,
-        status: "now_showing"
+        status: "now_showing",
+        synopsis: "Love on doomed ship.",
+        poster: "https://image.tmdb.org/t/p/w500/9xjZS2rlVxm8SFx8kPC3aIGCOYQ.jpg"
     },
     {
         id: "movie_10",
         title: "Oppenheimer",
-        genre: ["Drama", "History"],
+        genre: ["History"],
         rating: 8.9,
-        synopsis: "The story of the father of the atomic bomb...",
         duration: 180,
-        status: "coming_soon"
-    }
-];
-// Theatres
-const THEATRES = [
-    {
-        id: "theatre_1",
-        name: "Grand Cinema",
-        location: "Downtown"
-    },
-    {
-        id: "theatre_2",
-        name: "City Plex",
-        location: "Mall Road"
-    },
-    {
-        id: "theatre_3",
-        name: "IMAX Arena",
-        location: "Tech Park"
+        status: "now_showing",
+        synopsis: "Father of atomic bomb.",
+        poster: "https://image.tmdb.org/t/p/w500/ptpr0kGAckfQkJeJIt8st5dglvd.jpg"
     }
 ];
 
-// Showtimes (movie ↔ theatre mapping)
-const SHOWTIMES = [
-    {
-        id: "show_1",
-        movieId: "movie_1",
-        theatreId: "theatre_1",
-        time: "10:30"
-    },
-    {
-        id: "show_2",
-        movieId: "movie_1",
-        theatreId: "theatre_1",
-        time: "18:45"
-    },
-    {
-        id: "show_3",
-        movieId: "movie_1",
-        theatreId: "theatre_2",
-        time: "20:30"
-    },
-    {
-        id: "show_4",
-        movieId: "movie_2",
-        theatreId: "theatre_1",
-        time: "21:00"
-    },
-    {
-        id: "show_5",
-        movieId: "movie_3",
-        theatreId: "theatre_3",
-        time: "16:30"
-    },
-    {
-        id: "show_6",
-        movieId: "movie_4",
-        theatreId: "theatre_2",
-        time: "14:00"
-    },
-    {
-        id: "show_7",
-        movieId: "movie_5",
-        theatreId: "theatre_1",
-        time: "19:15"
-    },
-    {
-        id: "show_8",
-        movieId: "movie_6",
-        theatreId: "theatre_2",
-        time: "22:00"
-    },
-    {
-        id: "show_9",
-        movieId: "movie_8",
-        theatreId: "theatre_3",
-        time: "20:45"
-    },
-    {
-        id: "show_10",
-        movieId: "movie_9",
-        theatreId: "theatre_1",
-        time: "17:00"
-    }
-];
-//generating seats
-function generateSeats(showTime) {
-    const seats = [];
-    const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
-    
-    rows.forEach(row => {
-        for (let col=1; col <= 10; col++) {
-                    seats.push({
-                        id: `${showTime.id}_seat_${row}${col}`,
-                        showTimeId: showTime.id,
-                        seatID: `${row}${col}`,
-                        status: "available",
-                        lockedBy: null,
-                        lockedAt: null,
-                        bookingID: null,
-                        type: (row === 'A' || row === 'B') ? "VIP" : "Regular"
-                    });
-                }
-            });
-            return seats;
+// duplicate more to reach 20
+for (let i = 11; i <= 20; i++) {
+    MOVIES.push({
+        ...MOVIES[i - 11],
+        id: `movie_${i}`,
+        title: `${MOVIES[i - 11].title} ${i}`
+    });
 }
-//seed data store
+
+/* ================= THEATRES ================= */
+const THEATRES = [
+    { id: "theatre_1", name: "Grand Cinema", location: "Downtown" },
+    { id: "theatre_2", name: "City Plex", location: "Mall Road" },
+    { id: "theatre_3", name: "IMAX Arena", location: "Tech Park" }
+];
+
+/* ================= SHOWTIMES ================= */
+const SHOWTIMES = MOVIES.slice(0, 10).map((movie, index) => ({
+    id: `show_${index + 1}`,
+    movieId: movie.id,
+    theatreId: THEATRES[index % 3].id,
+    time: `${10 + index * 2}:00`
+}));
+
+/* ================= SEATS ================= */
+function generateSeats(show) {
+    const seats = [];
+    const rows = "ABCDEFGHIJ".split("");
+    rows.forEach(row => {
+        for (let i = 1; i <= 10; i++) {
+            seats.push({
+                id: `${show.id}_${row}${i}`,
+                showTimeId: show.id,
+                seatID: `${row}${i}`,
+                status: "available",
+                type: row <= "B" ? "VIP" : "Regular"
+            });
+        }
+    });
+    return seats;
+}
+
+/* ================= SEED FUNCTION ================= */
 export async function seedFirestore() {
-    //checking if the movie alr has data
-    const movieRef = collection(db, "movies");
-    const existingMovies = await getDocs(movieRef);
-    
-    //check if we alr have that movies in our db collection called movies
-    if (existingMovies.size > 0) {
-        console.log("Movies collection already seeded.");
-        return;
-    }
-    //if empty, we seed the data
-    console.log("Starting the Seeding Process...");
+    console.log("🔥 Clearing old data...");
 
-    ////seed/writing the movies in db
-    for (const movie of MOVIES) {
+    const collections = ["movies", "theatres", "showtimes", "seats"];
+
+    for (const col of collections) {
+        const snap = await getDocs(collection(db, col));
+        for (const d of snap.docs) {
+            await deleteDoc(doc(db, col, d.id));
+        }
+    }
+
+    console.log("✅ Old data removed");
+
+    for (const movie of MOVIES)
         await setDoc(doc(db, "movies", movie.id), movie);
-    }
-    console.log("Seeding Process Completed: Movies Seeded.");
-    
-    //seed the theatres
-    for (const theatre of THEATRES) {
-        await setDoc(doc(db, "theatres", theatre.id), theatre);
-    }   
-    console.log("Seeding Process Completed: Theatres Seeded.");
 
-    //seed showtimes
+    for (const theatre of THEATRES)
+        await setDoc(doc(db, "theatres", theatre.id), theatre);
+
     for (const show of SHOWTIMES) {
         await setDoc(doc(db, "showtimes", show.id), show);
-    }
-    console.log("Seeding Process Completed: Showtimes Seeded.");
-
-    //writing seeds
-    for (const show of SHOWTIMES) {
         const seats = generateSeats(show);
         for (const seat of seats) {
             await setDoc(doc(db, "seats", seat.id), seat);
         }
     }
-    console.log("Seats Created");
-    console.log("Seeding Process Completed on Firebase!!!");
+
+    console.log("🎉 Seeding completed successfully");
 }
