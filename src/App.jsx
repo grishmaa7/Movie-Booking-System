@@ -8,7 +8,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import MyBooking from './pages/Mybookings'
 import Footer from './pages/Footer'
-import { seedFirestore } from "./seed/seedData"
+import { seedFirestore } from './seed/seedData'
 
 const App = () => {
   useEffect(() => {

@@ -108,11 +108,7 @@ export default function Home() {
                 </div>
 
            
-                <div className="mt-6 flex justify-center">
-                    <button className="bg-yellow-500 hover:bg-yellow-600 py-3 px-8 rounded-lg font-bold text-black text-lg">
-                        Buy Tickets
-                    </button>
-                </div>
+               
             </div>
         </div>
     );
