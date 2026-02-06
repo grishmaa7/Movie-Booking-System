@@ -1,144 +1,157 @@
-import { useState } from "react"
-import { Mail, Lock, Phone, Chrome } from "lucide-react"
-import { Link, useNavigate } from "react-router-dom"
-import { auth } from "../config/firebase"
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth"
+import { useState } from "react";
+import { Mail, Lock, Phone, Chrome } from "lucide-react";
+import { useNavigate, Link } from "react-router-dom";
+import Cookies from "js-cookie";
 
 export default function Login() {
-    const navigate = useNavigate()
-    const [mode, setMode] = useState("email") // email | phone
+  const navigate = useNavigate();
+  const [loginType, setLoginType] = useState("email");
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [error, setError] = useState("");
 
-    const [email, setEmail] = useState("")
-    const [phone, setPhone] = useState("")
-    const [password, setPassword] = useState("")
-
-    const handleLogin = (e) => {
-        e.preventDefault()
-
-        localStorage.setItem(
-            "user",
-            JSON.stringify(
-                mode === "email"
-                    ? { email }
-                    : { phone }
-            )
-        )
-
-        navigate("/")
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters");
+      return;
     }
 
-    const handleGoogleLogin = () => {
-        const provider = new GoogleAuthProvider()
-        signInWithPopup(auth, provider).then((result) => {
-            localStorage.setItem(
-                "user",
-                JSON.stringify({
-                    name: result.user.displayName,
-                    email: result.user.email
-                })
-            )
-            navigate("/")
-        })
-    }
+    const user = {
+      name: "Demo User",
+      avatar: "https://i.ibb.co/KwBvfjJ/kuromi.png",
+      provider: loginType,
+    };
 
-    return (
-        <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: "#202A44" }}>
-            <div
-                className="border p-8 rounded-2xl w-[360px] shadow-xl text-white"
-                style={{ backgroundColor: "rgba(26,34,56,0.8)", borderColor: "#FACC15" }}
-            >
-                <h2 className="text-3xl font-bold text-center mb-6 text-yellow-400">
-                    Welcome Back 🎬
-                </h2>
+    Cookies.set("authToken", "demo-token", { expires: 7 });
+    Cookies.set("user", JSON.stringify(user), { expires: 7 });
 
-                {/* LOGIN MODE SWITCH */}
-                <div className="flex mb-6 bg-[#1A2238] rounded-full overflow-hidden border border-yellow-400">
-                    <button
-                        onClick={() => setMode("email")}
-                        className={`flex-1 py-2 text-sm font-semibold ${mode === "email"
-                                ? "bg-yellow-400 text-blue-900"
-                                : "text-yellow-400"
-                            }`}
-                    >
-                        Email
-                    </button>
-                    <button
-                        onClick={() => setMode("phone")}
-                        className={`flex-1 py-2 text-sm font-semibold ${mode === "phone"
-                                ? "bg-yellow-400 text-blue-900"
-                                : "text-yellow-400"
-                            }`}
-                    >
-                        Phone
-                    </button>
-                </div>
+    navigate("/");
+    window.location.reload();
+  };
 
-                {/* FORM */}
-                <form onSubmit={handleLogin} className="space-y-4">
+  const handleGoogleLogin = () => {
+    const user = {
+      name: "Google User",
+      avatar: "https://i.ibb.co/KwBvfjJ/kuromi.png",
+      provider: "google",
+    };
 
-                    {mode === "email" && (
-                        <div className="relative">
-                            <Mail className="absolute left-4 top-3 text-yellow-400" size={18} />
-                            <input
-                                type="email"
-                                placeholder="Email"
-                                required
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                className="w-full bg-[#1A2238] pl-11 py-2 rounded-lg border border-yellow-400"
-                            />
-                        </div>
-                    )}
+    Cookies.set("authToken", "google-token", { expires: 7 });
+    Cookies.set("user", JSON.stringify(user), { expires: 7 });
 
-                    {mode === "phone" && (
-                        <div className="relative">
-                            <Phone className="absolute left-4 top-3 text-yellow-400" size={18} />
-                            <input
-                                type="tel"
-                                placeholder="Phone number"
-                                required
-                                value={phone}
-                                onChange={(e) => setPhone(e.target.value)}
-                                className="w-full bg-[#1A2238] pl-11 py-2 rounded-lg border border-yellow-400"
-                            />
-                        </div>
-                    )}
+    navigate("/");
+    window.location.reload();
+  };
 
-                    <div className="relative">
-                        <Lock className="absolute left-4 top-3 text-yellow-400" size={18} />
-                        <input
-                            type="password"
-                            placeholder="Password"
-                            required
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="w-full bg-[#1A2238] pl-11 py-2 rounded-lg border border-yellow-400"
-                        />
-                    </div>
+  return (
+    <div className="relative min-h-screen bg-[#202A44] flex items-center justify-center overflow-hidden">
+      {/* STAR BACKGROUND */}
+      {[...Array(50)].map((_, i) => (
+        <span
+          key={i}
+          className="absolute bg-yellow-400 rounded-full animate-pulse"
+          style={{
+            top: `${Math.random() * 100}%`,
+            left: `${Math.random() * 100}%`,
+            width: `${Math.random() * 2 + 1}px`,
+            height: `${Math.random() * 2 + 1}px`,
+          }}
+        />
+      ))}
 
-                    <button className="w-full bg-yellow-400 text-blue-900 py-2 rounded-lg font-semibold">
-                        Login
-                    </button>
-                </form>
+      <div className="relative z-10 bg-[#1A2238]/90 border border-yellow-400 p-8 rounded-2xl w-[360px] shadow-xl text-white">
+        <h2 className="text-3xl font-bold text-center mb-2 text-yellow-400">
+          Welcome Back 🎬
+        </h2>
+        <p className="text-center text-sm text-yellow-200 mb-6">
+          Sign in to continue your CineBook journey ✨
+        </p>
 
-                <div className="text-center text-gray-400 my-4">or</div>
-
-                {/* GOOGLE */}
-                <button
-                    onClick={handleGoogleLogin}
-                    className="w-full flex items-center justify-center gap-3 border border-yellow-400 py-2 rounded-lg hover:bg-yellow-400 hover:text-blue-900"
-                >
-                    <Chrome size={18} />
-                    Continue with Google
-                </button>
-
-                <p className="text-center text-gray-400 mt-6 text-sm">
-                    Don’t have an account?{" "}
-                    <Link to="/register" className="text-yellow-400 hover:underline">
-                        Register
-                    </Link>
-                </p>
-            </div>
+        {/* LOGIN TYPE */}
+        <div className="flex mb-4 bg-[#202A44] rounded-lg overflow-hidden border border-yellow-400">
+          <button
+            onClick={() => setLoginType("email")}
+            className={`w-1/2 py-2 ${
+              loginType === "email" ? "bg-yellow-400 text-[#202A44]" : "text-yellow-400"
+            }`}
+          >
+            Email
+          </button>
+          <button
+            onClick={() => setLoginType("phone")}
+            className={`w-1/2 py-2 ${
+              loginType === "phone" ? "bg-yellow-400 text-[#202A44]" : "text-yellow-400"
+            }`}
+          >
+            Phone
+          </button>
         </div>
-    )
+
+        <form onSubmit={handleLogin} className="space-y-4">
+          {loginType === "email" ? (
+            <div className="relative">
+              <Mail className="absolute left-4 top-3 text-yellow-400" size={18} />
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full bg-[#202A44] pl-11 py-2 rounded-lg border border-yellow-400 outline-none text-yellow-100 placeholder-yellow-200"
+                required
+              />
+            </div>
+          ) : (
+            <div className="relative">
+              <Phone className="absolute left-4 top-3 text-yellow-400" size={18} />
+              <input
+                type="tel"
+                placeholder="Phone Number"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="w-full bg-[#202A44] pl-11 py-2 rounded-lg border border-yellow-400 outline-none text-yellow-100 placeholder-yellow-200"
+                required
+              />
+            </div>
+          )}
+
+          <div className="relative">
+            <Lock className="absolute left-4 top-3 text-yellow-400" size={18} />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full bg-[#202A44] pl-11 py-2 rounded-lg border border-yellow-400 outline-none text-yellow-100 placeholder-yellow-200"
+              required
+            />
+          </div>
+
+          {error && <p className="text-red-400 text-sm">{error}</p>}
+
+          <button className="w-full bg-yellow-400 hover:bg-yellow-300 text-[#202A44] py-2 rounded-lg font-semibold">
+            Login
+          </button>
+        </form>
+
+        <div className="text-center text-yellow-200 my-4">or</div>
+
+        <button
+          onClick={handleGoogleLogin}
+          className="w-full flex items-center justify-center gap-3 border border-yellow-400 py-2 rounded-lg hover:bg-yellow-300 hover:text-[#202A44]"
+        >
+          <Chrome size={18} />
+          Continue with Google
+        </button>
+
+        <p className="text-center text-yellow-200 mt-6 text-sm">
+          Don’t have an account?{" "}
+          <Link to="/register" className="text-yellow-400 hover:underline">
+            Register
+          </Link>
+        </p>
+      </div>
+    </div>
+  );
 }
