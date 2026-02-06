@@ -5,7 +5,7 @@ import {
     doc,
     setDoc
 } from "firebase/firestore";
-import { db } from "../config/Firebase";
+import { db } from "../config/firebase";
 
 /* ================= MOVIES (20 UNIQUE ITEMS) ================= */
 export const MOVIES = [
