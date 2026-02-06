@@ -107,8 +107,8 @@ export default function MovieDetails() {
                     key={date}
                     onClick={() => setSelectedDate(date)}
                     className={`px-4 py-1 rounded-lg text-sm cursor-pointer border border-yellow-400 transition ${selectedDate === date
-                        ? "bg-yellow-400 text-[#202A44] font-semibold"
-                        : "text-yellow-200 hover:bg-yellow-600/30"
+                      ? "bg-yellow-400 text-[#202A44] font-semibold"
+                      : "text-yellow-200 hover:bg-yellow-600/30"
                       }`}
                   >
                     {date}
@@ -128,8 +128,8 @@ export default function MovieDetails() {
                     key={time}
                     onClick={() => setSelectedTime(time)}
                     className={`px-4 py-1 rounded-lg text-sm cursor-pointer border border-yellow-400 transition ${selectedTime === time
-                        ? "bg-yellow-400 text-[#202A44] font-semibold"
-                        : "text-yellow-200 hover:bg-yellow-600/30"
+                      ? "bg-yellow-400 text-[#202A44] font-semibold"
+                      : "text-yellow-200 hover:bg-yellow-600/30"
                       }`}
                   >
                     {time}

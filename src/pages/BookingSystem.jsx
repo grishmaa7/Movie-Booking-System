@@ -92,20 +92,20 @@ export default function BookingSystem() {
             <p>🎟 Rs. {TICKET_PRICE} / seat</p>
           </div>
 
-          <div className="border-t border-yellow-400 pt-3 text-yellow-300 text-sm">
+          <div className="border-t border-yellow-400 pt-3 text-yellow-200 text-sm">
             <p>
-              Selected Seats:{" "}
+             
               <span className="text-yellow-400 font-semibold">
                 {selectedSeats.length > 0
                   ? selectedSeats.join(", ")
-                  : "None"}
+                  : ""}
               </span>
             </p>
 
             <p className="mt-1">
-              Total:{" "}
+              
               <span className="text-yellow-400 font-bold">
-                Rs. {totalPrice}
+                
               </span>
             </p>
           </div>
