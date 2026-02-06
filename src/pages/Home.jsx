@@ -84,7 +84,7 @@ export default function Home() {
             {/* Now Showing */}
             <div className="px-10 py-14 relative z-10">
                 <h2 className="text-3xl md:text-4xl font-bold mb-6 text-yellow-400">
-                    Now Showing
+                    Now Showing✨
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     {MOVIES.map((movie) => (

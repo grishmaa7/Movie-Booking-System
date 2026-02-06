@@ -11,6 +11,8 @@ import Footer from './pages/Footer'
 import { seedFirestore } from './seed/seedData'
 import Contact from './pages/Contact'
 import Category from './pages/Category'
+import BookingSystem from './pages/BookingSystem'
+
 
 const App = () => {
   useEffect(() => {
@@ -29,6 +31,7 @@ const App = () => {
         <Route path='/my-booking' element={<MyBooking />} />
         <Route path='/contact' element={<Contact />} />
         <Route path='/category' element={<Category />} />
+        <Route path='/booking' element={<BookingSystem />} />
 
       </Routes>
       <Footer />

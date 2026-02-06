@@ -1,5 +1,5 @@
 import React from "react"
-import { Film } from "lucide-react"
+import { Star } from "lucide-react"
 import { Link } from "react-router-dom"
 
 export default function Footer() {
@@ -10,7 +10,7 @@ export default function Footer() {
         {/* Logo + Description */}
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-2 text-yellow-400 font-bold text-2xl">
-            <Film />
+            <Star />
             CineBook
           </div>
           <p className="text-blue-100/70 max-w-sm">
